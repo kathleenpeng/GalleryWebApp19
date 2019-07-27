@@ -1,0 +1,15 @@
+{
+  "name": "gallery",
+  "version": "1.0.0",
+  "description": "app to the end web app dev",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zhen",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.6.2",
+    "express": "^4.17.1"
+  }
+}
