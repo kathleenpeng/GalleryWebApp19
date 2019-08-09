@@ -1,10 +1,9 @@
 body {
     background-color: #555;
-    background-image: url("/fitness.jpg");
+    background-image: url("/frontbg.jpeg");
     background-repeat:no-repeat;
-    background-size:100% 100%;
+    background-size: 100%;
       text-align: center;
-    min-height:900px; /* we will remove this later */
 }
 
 
