@@ -19,14 +19,8 @@
     },
     {
         "id": 4,
-        "name": "Sinead",
-        "comment": "From Sinead",
-        "email": "sinead@gmail.com"
-    },
-    {
-        "id": 5,
-        "name": "",
-        "comment": "",
-        "email": ""
+        "name": "Fran",
+        "comment": "From Fran",
+        "email": "fran@gamil.com"
     }
 ]
