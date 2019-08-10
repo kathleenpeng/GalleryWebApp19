@@ -3,9 +3,13 @@
 
 <div class="row">
   <div class="contactsection">
-  <h1>Welcome to the contact page  <br>
+  <h1>Welcome to contact us  <br></h1>
   <p>D gallery is located in dublin city center, it was found in the late 1990s.<br>
+   <span class="button" id="show">Toggle to see information</span></p>
+  <p class="showup">
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+ <h2>
+ 
   <div style="text-align: center; width: 100%; background-color: rgba(255, 255, 255, 0.8);text-align: center; margin-bottom: 10px;" >
         
        
@@ -13,18 +17,30 @@
                 <div class="item">
                   <label for="name">Name</label>
                     <input name="name" type="text" placeholder="Enter name" />
-                      <label for="price">Comment</label>
+                      <label for="price">Message</label>
                     <input name="comment" type="text" placeholder="Enter comment" />
                    <label for="image">Email</label> 
                     <input name="email" type="text" placeholder="Enter email" />
-                       <button class="button">Add</button>
+                       <button class="button">Send</button>
                   </div>
           </form>
           
-          <!--<button class="button">Update</button>-->
+          
+          
+          <script>
+
+    // Function to slide up and down content
+    $(document).ready(function() {
+     $("#show").click(function(){
+       $(".showup").slideToggle(1000);
+
+     })
+
+    });
+    </script>
           
     </div>
-  </h1>
+  </h2>
     <a href="/contacts">Show Contacts</a>
   </div>
 </div>

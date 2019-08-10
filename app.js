@@ -209,6 +209,7 @@ app.get('/delete/:id', function(req,res){
 
 // ******************************************From here is JSON data ********************************
 var contact = require("./model/contact.json");
+var review = require("./model/review.json");
 
 // set up simple hello world application using the request and response function
 app.get('/', function(req, res) {
@@ -219,13 +220,147 @@ console.log("Hello World"); // used to output activity in the console
 
 app.get('/contacts', function(req,res){
     res.render("contacts", {contact}); //Get the contacts page when somebody visits the /contacts url
-    console.log("I found the about page");
+    console.log("contacts page has been displayed");
 });
 
-// app.get('/about', function(req,res){
-//     res.render("about"); //Get the about page when somebody visits the /contacts url
-//     console.log("I found the contacts page");
-// });
+
+
+app.get('/reviews', function(req,res){
+    res.render("reviews",{review}); //Get the review page when somebody visits the /contacts url
+    console.log("I found the reviews page");
+});
+
+// Get the review page
+app.get('/addreview', function(req, res) {
+res.render("addreview"); // we set the response to send back the string I found the contact us page
+console.log("I found the comment or review page"); // used to output activity in the console
+});
+//post request to send JSON data to server
+app.post("/addreview",function(req,res){
+   
+   //Step 1 is to find the largest id in the JSON file 
+   function getMax(review, id){ // function is called getMax
+   var max // the max variable is declared here but still unknown
+   
+    for (var i=0; i<review.length; i++){ // loop through the reviews in the json file as long as there are reviews to read
+        
+        if(!max || parseInt(review[i][id])> parseInt(max[id]))
+        max = review[i];
+    }
+    return max;
+    
+    }
+    // make a new ID for the next item in the JSON file
+     maxCid = getMax(review,"id") // calls the getMax function from above and passes in parameters
+    
+    var newId = maxCid.id + 1; // add 1 to old largest to make new largest
+    // show the result in the console
+    console.log("new Id is " + newId)
+    // we need to get access to what the user types in the form
+    // and pass it to our JSON file as the new data
+    
+    var reviewsx = {
+        id: newId,
+        name: req.body.name,
+        comment: req.body.comment,
+        email: req.body.email
+        
+    }
+    fs.readFile('./model/review.json','utf8', function readfileCallback(err){
+        if(err) {
+            throw(err)
+        } else {
+            
+            review.push(reviewsx); // add the new data to the JSON file
+            json = JSON.stringify(review, null, 4); // this line structures the JSON so it's easy on the eye
+            fs.writeFile('./model/review.json',json, 'utf8')
+        }
+    })
+    
+    res.redirect('/reviews');
+    
+    
+});
+
+// *** get page to edit 
+app.get('/editreview/:id', function(req,res){
+    // Now we build the actual information based on the changes made by the user 
+   function chooseReview(indTwo){
+       return indTwo.id === parseInt(req.params.id)
+       }
+
+
+  var indTwo = review.filter(chooseReview)
+    
+   res.render('editreview', {res:indTwo}); 
+    
+});
+
+// *** Perform the edit
+
+ app.post('/editreview/:id', function(req,res){
+     
+     //firstly we need to stringify our JSON data so it can be call as a variable an modified as needed
+     var json = JSON.stringify(review)
+     
+     // declare the incoming id from the url as a variable
+     var keyToFind = parseInt(req.params.id)
+    
+    // use predetermined JavaScript functionality to map the data and find the Information i need
+    var index = review.map(function(review) {return review.id}).indexOf(keyToFind)
+    
+    // the next three lines get the content from the body where the user fills in the form 
+    var z = parseInt(req.params.id);
+    var x = req.body.name   
+    var y = req.body.comment
+    // The next section pushes the new data into the json file in place of the data to be updated
+    review.splice(index, 1, {name: x, comment: y, email: req.body.email, id: z })
+    
+    
+    // Now we reformat the JSON and push it back to the actual file 
+    json = JSON.stringify(review, null, 4); // this line structures the JSON so it's easy on the eye
+    fs.writeFile('./model/review.json',json,'utf8',function(){})
+    
+    res.redirect("/reviews");
+})
+
+app.get ('/deletereview/:id', function(req,res){
+    
+    
+    
+    // firstly we need to stringify our JSON data so it can be call as a variable an modified as needed
+    var json = JSON.stringify(review)
+    
+    // declare the incoming id from the url as a variable 
+    var keyToFind = parseInt(req.params.id)
+    
+    // use predetermined JavaScript functionality to map the data and find the information I need 
+    var index = review.map(function(review) {return review.id}).indexOf(keyToFind)
+    
+
+    review.splice(index, 1)
+    
+  
+    
+    // now we reformat the JSON and push it back to the actual file
+    json = JSON.stringify(review, null, 4); // this line structures the JSON so it is easy on the eye
+    fs.writeFile('./model/review.json',json, 'utf8', function(){})
+    
+    res.redirect("/reviews");
+    
+    
+    
+})
+
+
+
+
+
+
+
+
+
+
 
 
 

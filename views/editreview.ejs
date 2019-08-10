@@ -2,22 +2,23 @@
 
 
 <div class="row">
-  <h1>Welcome to the edit contact page </h1> <br>
+  <h1>Welcome to the review page  <br></h1>
   <h2>
   <div style="text-align: center; width: 100%; background-color: rgba(255, 255, 255, 0.8);text-align: center; margin-bottom: 10px;" >
-       <% res.forEach(function(indOne) {%>  
-         <form accept-charset="UTF-8" style="display: inline-block; width: 90%;" action="/editcontact/<%= indOne.id %>" method="post">    
+       <% res.forEach(function(indTwo) {%>  
+         <form accept-charset="UTF-8" style="display: inline-block; width: 90%;" action="/editreview/<%= indTwo.id %>" method="post">    
                 <div class="item">
                   <label for="name">Name</label>
-                    <input name="name" type="text" value="<%= indOne.name %>" />
+                    <input name="name" type="text" value="<%= indTwo.name %>" />
                      
-                  <label for="comment">Message</label>
-                    <input name="comment" type="text" value="<%= indOne.comment %>" />
+                  <label for="comment">Comment</label>
+                    <input name="comment" type="text" value="<%= indTwo.comment %>" />
                   
                    <label for="email">Email</label> 
-                    <input name="email" type="text" value="<%= indOne.email %>" />
+                    <input name="email" type="text" value="<%= indTwo.email %>" />
                     
                        <button class="button">Update</button>
+                      
                   </div>
           </form>
           
