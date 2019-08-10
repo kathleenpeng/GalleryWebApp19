@@ -8,10 +8,204 @@ app.use(express.static("views")); // Allow access to views folder
 app.use(express.static("style")); // Allow access to styling folder
 app.use(express.static("images")); // Allow access to images
 
+
+var mysql = require('mysql');
+
 // body parser to get information
 var fs = require('fs')
 var bodyParser = require("body-parser") // Call body parser modul and make use of it
 app.use(bodyParser.urlencoded({extended:true}));
+
+//**************************Start of SQL ****************************
+
+const db = mysql.createConnection({
+    host: 'den1.mysql6.gear.host',
+    user: 'gallerybd',
+    password: 'Ne1PzD?0iS~v',
+    database: 'gallerybd'
+ });
+// Next we need to create a connection to the database
+
+db.connect((err) =>{
+     if(err){
+        console.log("go back and check the connection details. Something is wrong.")
+        // throw(err)
+    } 
+     else{
+        
+        console.log('Looking good the database connected')
+    }
+    
+    
+})
+
+// this route will create a database table
+// app.get('/createtable', function(req,res){
+//     // Create a table that will show product Id, name, price, image and sporting activity
+    
+//     let sql = 'CREATE TABLE Zhen (Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(255), Price int, Image varchar(255), Activity varchar(255))';
+    
+//      let query = db.query(sql, (err,res) => {
+        
+//          if(err) throw err;
+        
+//          console.log(res);
+        
+//      });
+    
+//      res.send("You created your first DB Table")
+    
+//  })
+
+ // This route will create a product 
+
+
+// app.get('/insert', function(req,res){
+//     // Insert a table that will show product Id, name, price, image and sporting activity
+//     let sql = 'INSERT INTO Zhen (Name, Price, Image, Activity) VALUES ("polar M400", 199, "polarm400.png", "Running") ';
+    
+//     let query = db.query(sql, (err,res) => {
+        
+//         if(err) throw err;
+        
+//         console.log(res);
+        
+//     });
+    
+//     res.send("You created your first Product")
+    
+// })   
+ 
+ // Url to get the products
+
+app.get('/products', function(req,res){
+    // Create a table that will show product Id, name, price, image and sporting activity
+    let sql = 'SELECT * FROM Zhen';
+    
+    let query = db.query(sql, (err,result) => {
+        
+        if(err) throw err;
+        
+        console.log(result);
+        
+        res.render('products', {result})
+        
+    });
+    
+    //res.send("You created your first Product")
+    
+})   
+
+// URL to get the add product page
+app.get('/addproduct', function(req,res){
+    // Create a table that will show product Id, name, price, image and sporting activity
+  
+        res.render('addproduct')
+        
+  
+    
+})
+
+
+// post request to write info to the database
+
+
+app.post('/addproduct', function(req,res){
+    
+//  let sampleFile = req.files.sampleFile;
+//   filename = sampleFile.name;
+    
+//     sampleFile.mv('./images/' + filename, function(err){
+        
+//         if(err)
+        
+//         return res.status(500).send(err);
+//         console.log("Image you are uploading is " + filename)
+//       // res.redirect('/');
+//     })
+    
+    
+    
+    
+    // Create a table that will show product Id, name, price, image and sporting activity
+    let sql = 'INSERT INTO Zhen (Name, Price, Image, Activity) VALUES ("   '+req.body.name+'   ", '+req.body.price+', "'+req.body.image+'", "'+req.body.activity+'") ';
+    //   let sql = 'INSERT INTO Zhen (Name, Price, Image, Activity) VALUES ("polar M400", 199, "polarm400.png", "Running") ';
+
+   
+   let query = db.query(sql, (err,res) => {
+        
+        if(err) throw err;
+        
+        console.log(res);
+        
+    });
+    
+    res.redirect('/products')
+    //res.send("You created your first Product")
+    
+})
+
+// URL to get the edit product page
+
+app.get('/editproduct/:id', function(req,res){
+    
+    
+    let sql = 'SELECT * FROM Zhen WHERE Id =  "'+req.params.id+'" ';
+    
+    let query = db.query(sql, (err,result) => {
+        
+        if(err) throw err;
+        
+        console.log(result);
+        
+        res.render('editproduct', {result})
+        
+    });
+    
+    
+})
+    
+ // URL to edit product
+   
+  app.post('/editproduct/:id', function(req,res){
+    // Create a table that will show product Id, name, price, image and description
+    let sql = 'UPDATE Zhen SET Name = "   '+req.body.name+'   ", Price = '+req.body.price+', Image = "'+req.body.image+'", Activity = "'+req.body.activity+'" WHERE Id =  "'+req.params.id+'" ';
+    
+    let query = db.query(sql, (err,res) => {
+        
+        if(err) throw err;
+        
+        console.log(res);
+        
+    });
+    
+    res.redirect('/products')
+    //res.send("You created your first Product")
+    
+}) 
+   
+// URL TO delete a product
+
+app.get('/delete/:id', function(req,res){
+    
+        let sql = 'DELETE FROM Zhen WHERE Id =  "'+req.params.id+'" ';
+    
+    let query = db.query(sql, (err,result) => {
+        
+        if(err) throw err;
+        
+        console.log(result);
+  
+    });
+    
+    res.redirect('/products')
+    
+    
+})
+
+
+
+//**************************End of SQL ******************************
 
 // ******************************************From here is JSON data ********************************
 var contact = require("./model/contact.json");
@@ -25,8 +219,16 @@ console.log("Hello World"); // used to output activity in the console
 
 app.get('/contacts', function(req,res){
     res.render("contacts", {contact}); //Get the contacts page when somebody visits the /contacts url
-    console.log("I found the contacts page");
+    console.log("I found the about page");
 });
+
+// app.get('/about', function(req,res){
+//     res.render("about"); //Get the about page when somebody visits the /contacts url
+//     console.log("I found the contacts page");
+// });
+
+
+
 
 // Get the contact us page
 app.get('/add', function(req, res) {
@@ -159,4 +361,6 @@ app.get ('/deletecontact/:id', function(req,res){
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
 console.log("Yippee its running");
   
+
+
 });
